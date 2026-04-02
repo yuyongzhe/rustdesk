@@ -360,6 +360,7 @@ class _RemoteToolbarState extends State<RemoteToolbar> {
               toolbarState: widget.state,
               setFullscreen: _setFullscreen,
               setMinimize: _minimize,
+              ffi: widget.ffi,  // 新增
               borderRadius: borderRadius,
             ),
           ),
@@ -2526,6 +2527,9 @@ class _DraggableShowHide extends StatefulWidget {
   final Function(bool) setFullscreen;
   final Function() setMinimize;
 
+  // 新增：添加 FFI 参数
+  final FFI ffi;
+
   const _DraggableShowHide({
     Key? key,
     required this.id,
@@ -2535,6 +2539,7 @@ class _DraggableShowHide extends StatefulWidget {
     required this.toolbarState,
     required this.setFullscreen,
     required this.setMinimize,
+    required this.ffi,  // 新增
     required this.borderRadius,
   }) : super(key: key);
 
@@ -2550,6 +2555,30 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
 
   RxBool get collapse => widget.toolbarState.collapse;
 
+  // 获取 PeerInfo
+  PeerInfo get pi => widget.ffi.ffiModel.pi;
+  FFI get ffi => widget.ffi;
+
+  // 新增：切换显示器方法
+  void _switchDisplay() {
+    if (pi.displaysCount.value <= 1) return;
+    
+    RxInt display = CurrentDisplayState.find(widget.id);
+    int nextDisplay = (display.value + 1) % pi.displaysCount.value;
+    
+    if (display.value != nextDisplay) {
+      final isChooseDisplayToOpenInNewWindow = pi.isSupportMultiDisplay &&
+          bind.sessionGetDisplaysAsIndividualWindows(
+                  sessionId: widget.sessionId) ==
+              'Y';
+      if (isChooseDisplayToOpenInNewWindow) {
+        openMonitorInNewTabOrWindow(nextDisplay, ffi.id, pi);
+      } else {
+        openMonitorInTheSameTab(nextDisplay, ffi, pi, updateCursorPos: true);
+      }
+    }
+  }
+  
   @override
   initState() {
     super.initState();
@@ -2655,6 +2684,20 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
                 ),
               ),
             )),
+        // 新增：显示器切换按钮
+        if (pi.displaysCount.value > 1)
+          Obx(() => buttonWrapper(
+                () {
+                  _switchDisplay();
+                },
+                Tooltip(
+                  message: translate('Switch Display'),
+                  child: Icon(
+                    Icons.display,
+                    size: iconSize,
+                  ),
+                ),
+              )),
         if (!isMacOS && !isWebDesktop)
           Obx(() => Offstage(
                 offstage: isFullscreen.isFalse,

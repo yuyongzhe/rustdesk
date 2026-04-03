@@ -2693,7 +2693,7 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
                 Tooltip(
                   message: translate('Switch Display'),
                   child: Icon(
-                    Icons.display,
+                    Icons.display_settings,
                     size: iconSize,
                   ),
                 ),

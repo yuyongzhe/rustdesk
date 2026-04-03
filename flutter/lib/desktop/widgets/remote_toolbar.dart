@@ -2669,6 +2669,20 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildDraggable(context),
+        // 新增：显示器切换按钮
+        if (pi.displaysCount.value > 1)
+          Obx(() => buttonWrapper(
+                () {
+                  _switchDisplay();
+                },
+                Tooltip(
+                  message: translate('Switch Display'),
+                  child: Icon(
+                    Icons.view_carousel,
+                    size: iconSize,
+                  ),
+                ),
+              )),
         Obx(() => buttonWrapper(
               () {
                 widget.setFullscreen(!isFullscreen.value);
@@ -2684,20 +2698,6 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
                 ),
               ),
             )),
-        // 新增：显示器切换按钮
-        if (pi.displaysCount.value > 1)
-          Obx(() => buttonWrapper(
-                () {
-                  _switchDisplay();
-                },
-                Tooltip(
-                  message: translate('Switch Display'),
-                  child: Icon(
-                    Icons.display_settings,
-                    size: iconSize,
-                  ),
-                ),
-              )),
         if (!isMacOS && !isWebDesktop)
           Obx(() => Offstage(
                 offstage: isFullscreen.isFalse,

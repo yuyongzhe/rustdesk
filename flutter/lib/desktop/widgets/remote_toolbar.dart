@@ -2669,15 +2669,17 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildDraggable(context),
-        // 新增：显示器切换按钮
         Obx(() => buttonWrapper(
               () {
-                _switchDisplay();
+                widget.setFullscreen(!isFullscreen.value);
               },
               Tooltip(
-                message: translate('Switch Display'),
+                message: translate(
+                    isFullscreen.isTrue ? 'Exit Fullscreen' : 'Fullscreen'),
                 child: Icon(
-                  Icons.fullscreen_exit,//view_carousel,
+                  isFullscreen.isTrue
+                      ? Icons.fullscreen_exit
+                      : Icons.fullscreen,
                   size: iconSize,
                 ),
               ),

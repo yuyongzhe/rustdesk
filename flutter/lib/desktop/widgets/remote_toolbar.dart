@@ -2671,15 +2671,12 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
         _buildDraggable(context),
         Obx(() => buttonWrapper(
               () {
-                widget.setFullscreen(!isFullscreen.value);
+                _switchDisplay();
               },
               Tooltip(
-                message: translate(
-                    isFullscreen.isTrue ? 'Exit Fullscreen' : 'Fullscreen'),
+                message: translate('Switch Display'),
                 child: Icon(
-                  isFullscreen.isTrue
-                      ? Icons.fullscreen_exit
-                      : Icons.fullscreen,
+                  Icons.fullscreen,
                   size: iconSize,
                 ),
               ),

@@ -2676,7 +2676,7 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
               Tooltip(
                 message: translate('Fullscreen'),
                 child: Icon(
-                  Icons.view_carousel
+                  Icons.view_carousel,
                   size: iconSize,
                 ),
               ),

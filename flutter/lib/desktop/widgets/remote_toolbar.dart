@@ -2674,12 +2674,9 @@ class _DraggableShowHideState extends State<_DraggableShowHide> {
                 _switchDisplay();
               },
               Tooltip(
-                message: translate(
-                    isFullscreen.isTrue ? 'Exit Fullscreen' : 'Fullscreen'),
+                message: translate('Fullscreen'),
                 child: Icon(
-                  isFullscreen.isTrue
-                      ? Icons.fullscreen_exit
-                      : Icons.fullscreen,
+                  Icons.view_carousel
                   size: iconSize,
                 ),
               ),
